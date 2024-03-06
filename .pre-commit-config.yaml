@@ -35,9 +35,21 @@ repos:
 
   - repo: local
     hooks:
-      - id: export-requirements
-        name: Export requirements
+      - id: export-migrations-requirements
+        name: Export migrations requirements
         language: system
         pass_filenames: false
-        entry: poetry export --without-hashes --with dev --output infra/requirements.txt
+        entry: poetry export --without-hashes --extras migrations --output infra/requirements.migrations.txt
+        files: ^(pyproject.toml|poetry.lock)$
+      - id: export-api-requirements
+        name: Export api requirements
+        language: system
+        pass_filenames: false
+        entry: poetry export --without-hashes --extras api --output infra/requirements.api.txt
+        files: ^(pyproject.toml|poetry.lock)$
+      - id: export-extractor-requirements
+        name: Export extractor requirements
+        language: system
+        pass_filenames: false
+        entry: poetry export --without-hashes --extras extractor --output infra/requirements.extractor.txt
         files: ^(pyproject.toml|poetry.lock)$

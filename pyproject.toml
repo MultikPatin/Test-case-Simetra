@@ -7,10 +7,20 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-fastapi = "^0.110.0"
-uvicorn = "^0.27.1"
+pydantic = "^2.6.3"
+pydantic-settings = "^2.2.1"
 sqlalchemy = "^2.0.28"
+geoalchemy2 = "^0.14.6"
+fastapi = {version = "^0.110.0", optional = true}
+uvicorn = {version = "^0.27.1", extras = ["standard"], optional = true}
+psycopg2-binary = {version = "^2.9.9", optional = true}
+openpyxl = {version = "^3.1.2", optional = true}
+alembic = {version = "^1.13.1", optional = true}
 
+[tool.poetry.extras]
+migrations = ["alembic"]
+api = ["uvicorn", "fastapi"]
+extractor = ["openpyxl", "psycopg2-binary"]
 
 [tool.poetry.group.dev]
 optional = true
