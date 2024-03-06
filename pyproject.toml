@@ -9,16 +9,18 @@ readme = "README.md"
 python = "^3.11"
 pydantic = "^2.6.3"
 pydantic-settings = "^2.2.1"
-sqlalchemy = "^2.0.28"
-geoalchemy2 = "^0.14.6"
+sqlalchemy = {version = "^2.0.28", optional = true}
+geoalchemy2 = {version = "^0.14.6", optional = true}
 fastapi = {version = "^0.110.0", optional = true}
 uvicorn = {version = "^0.27.1", extras = ["standard"], optional = true}
 psycopg2-binary = {version = "^2.9.9", optional = true}
 openpyxl = {version = "^3.1.2", optional = true}
 alembic = {version = "^1.13.1", optional = true}
+asyncpg = {version = "^0.29.0", optional = true}
 
 [tool.poetry.extras]
-migrations = ["alembic"]
+orm = ["sqlalchemy", "geoalchemy2"]
+migrations = ["alembic", "asyncpg"]
 api = ["uvicorn", "fastapi"]
 extractor = ["openpyxl", "psycopg2-binary"]
 

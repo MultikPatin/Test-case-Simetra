@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d db" ]
+      test: [ "CMD-SHELL", "pg_isready -U app -d db" ]
       interval: 3s
       timeout: 3s
       retries: 5
@@ -27,16 +27,19 @@ services:
       context: ../
       dockerfile: ./src/migrations/Dockerfile
     container_name: migrations
+    environment:
+      - POSTGRES_HOST=postgis
     env_file:
       - ../.env
+    restart: no
     depends_on:
-      postgres:
+      postgis:
         condition: service_healthy
     networks:
       - services
 
 volumes:
-  postgis_data:
+  postgres_data:
 
 networks:
   services:
