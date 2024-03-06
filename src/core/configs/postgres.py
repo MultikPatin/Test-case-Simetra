@@ -20,17 +20,6 @@ class PostgresSettings(BaseSettings):
     host: str = Field(default=..., alias="POSTGRES_HOST")
     port: int = Field(default=..., alias="POSTGRES_PORT")
 
-    # @property
-    # def psycopg2_connect_local(self) -> dict:
-    #     return {
-    #         "dbname": self.db_name,
-    #         "user": self.user,
-    #         "password": self.password.get_secret_value(),
-    #         "host": "127.0.0.1",
-    #         "port": self.port,
-    #         "cursor_factory": DictCursor,
-    #     }
-
     @property
     def postgres_connection_url(self) -> URL:
         return URL.create(

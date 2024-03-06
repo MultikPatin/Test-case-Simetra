@@ -38,6 +38,21 @@ services:
     networks:
       - services
 
+  exel_to_postgis:
+    build:
+      context: ../
+      dockerfile: ./src/exel_to_postgis/Dockerfile
+    container_name: exel_to_postgis
+    environment:
+      - POSTGRES_HOST=postgis
+    env_file:
+      - ../.env
+    restart: no
+    depends_on:
+      - migrations
+    networks:
+      - services
+
 volumes:
   postgres_data:
 

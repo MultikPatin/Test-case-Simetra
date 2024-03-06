@@ -13,7 +13,7 @@ class ExelSettings(BaseSettings):
     )
 
     filepath: str = Field(default=..., alias="EXEL_FILEPATH")
-    buffer_size: str = Field(default=..., alias="EXEL_BUFFERED_ROWS")
+    buffer_size: int = Field(default=..., alias="EXEL_BUFFERED_ROWS")
 
 
 settings = ExelSettings()

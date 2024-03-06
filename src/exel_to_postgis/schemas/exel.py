@@ -9,3 +9,7 @@ class ExelRow:
     speed: int
     gps_time: str
     vehicle_id: int
+
+    @property
+    def get_point(self):
+        return f"POINT({self.longitude} {self.latitude})"

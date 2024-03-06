@@ -1254,11 +1254,11 @@ files = [
 
 [extras]
 api = ["fastapi", "uvicorn"]
-extractor = ["openpyxl", "psycopg2-binary"]
+extractor = ["openpyxl", "psycopg2-binary", "sqlalchemy"]
 migrations = ["alembic", "asyncpg"]
 orm = ["geoalchemy2", "sqlalchemy"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "2dc6f91033ca6b18595f7f7651b01f5c48811bc9e4a41964a006cecd2add4aa4"
+content-hash = "063e8a47d691977afbfb8d74d6bf841766282b13e440191322d8d1eea2212d4c"
