@@ -50,8 +50,7 @@ class PostgresSaver:
         column_names_str = ",".join(column_names)
         return column_names_str
 
-    @staticmethod
-    def __get_insert_values(rows: list[ExelRow]) -> str:
+    def __get_insert_values(self, rows: list[ExelRow]) -> str:
         values = [
             (
                 row.id,
@@ -62,5 +61,12 @@ class PostgresSaver:
             )
             for row in rows
         ]
-        values = ", ".join(str(value) for value in values)
+        values = ", ".join(
+            str(self.__validate_value(value)) for value in values
+        )
         return values
+
+    @staticmethod
+    def __validate_value(row):
+        # TODO: реализовать валидацию строки таблицы
+        return row

@@ -1,6 +1,7 @@
 from collections.abc import Generator
 
 from openpyxl import load_workbook
+from openpyxl.workbook.workbook import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
 from src.core.utils.logger import create_logger
@@ -10,9 +11,15 @@ from src.exel_to_postgis.schemas.exel import ExelRow
 class ExelExtractor:
     def __init__(self, filepath: str, buffer_size: int):
         self.__buffer_size = buffer_size
-        self.__wb = load_workbook(filepath)
-        self.__max_col = 6
+        self.__wb = self.__get_workbook(filepath)
+        self.__max_col = 6  # для тестовой реализации
         self.logger = create_logger("ExelExtractor")
+
+    def __get_workbook(self, filepath: str) -> Workbook:
+        try:
+            return load_workbook(filepath)
+        except FileNotFoundError as e:
+            self.logger.error(f"==> Задан неверный путь к файлу | {e}")
 
     def __get_sheet(self, sheet_name: str = None) -> Worksheet:
         ws = None
@@ -55,12 +62,18 @@ class ExelExtractor:
     def __get_rows_values_by_position(
         self, ws: Worksheet, min_row: int, max_row: int
     ) -> Generator:
-        yield from ws.iter_rows(
+        for row in ws.iter_rows(
             max_col=self.__max_col,
             min_row=min_row,
             max_row=max_row,
             values_only=True,
-        )
+        ):
+            yield self.__validate_row(row)
+
+    @staticmethod
+    def __validate_row(row):
+        # TODO: реализовать валидацию строки таблицы
+        return row
 
     @staticmethod
     def __get_row_in_frozen_set(rows: Generator, headers: tuple) -> list:
