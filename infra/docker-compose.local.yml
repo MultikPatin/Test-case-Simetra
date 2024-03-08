@@ -53,6 +53,23 @@ services:
     networks:
       - services
 
+  api:
+    build:
+      context: ../
+      dockerfile: ./src/api/Dockerfile
+    container_name: api
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../.env
+    depends_on:
+      - postgis
+      - migrations
+      - exel_to_postgis
+    networks:
+      - services
+
 volumes:
   postgres_data:
 

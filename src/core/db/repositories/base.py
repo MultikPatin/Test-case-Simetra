@@ -1,8 +1,13 @@
+from typing import TypeVar
+
+from geoalchemy2.shape import to_shape
+from geoalchemy2.types import WKBElement
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.database import Database
 from src.core.db.models import Base
+
+ModelType = TypeVar("ModelType", bound=Base)
 
 
 class BaseRepository:
@@ -11,20 +16,29 @@ class BaseRepository:
     _database: Database
     _model: Base
 
-    def __init__(self, database: Database, model: Base) -> None:
+    def __init__(self, database: Database, model: ModelType) -> None:
         self._database = database
         self._model = model
 
-    async def get_all(self, session: AsyncSession = None) -> list[Base]:
-        async with self._database.get_session(session) as session:
-            objects = await session.execute(select(self._model))
-            return objects.scalars().all()
+    async def get_all(self) -> list[ModelType]:
+        async with self._database.get_session() as session:
+            db_objs = await session.execute(select(self._model))
+            db_objs = db_objs.scalars().all()[:10]
+            for db_obj in db_objs:
+                db_obj.geom = self.get_correct_geom_field(db_obj.geom)
+            return db_objs
 
-    async def get_or_none(
-        self, instance_id: int, session: AsyncSession = None
-    ) -> Base | None:
-        async with self._database.get_session(session) as session:
+    async def get_or_none(self, instance_id: int) -> ModelType | None:
+        async with self._database.get_session() as session:
             db_obj = await session.execute(
                 select(self._model).where(self._model.id == instance_id)
             )
-            return db_obj.scalars().first()
+            db_obj = db_obj.scalars().first()
+            db_obj.geom = self.get_correct_geom_field(db_obj.geom)
+            return db_obj
+
+    @staticmethod
+    def get_correct_geom_field(geom):
+        if isinstance(geom, str):
+            geom = WKBElement(geom)
+        return to_shape(geom).wkt

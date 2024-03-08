@@ -39,13 +39,13 @@ repos:
         name: Export migrations requirements
         language: system
         pass_filenames: false
-        entry: poetry export --without-hashes --extras orm --extras migrations --output infra/requirements.migrations.txt
+        entry: poetry export --without-hashes --extras migrations --output infra/requirements.migrations.txt
         files: ^(pyproject.toml|poetry.lock)$
       - id: export-api-requirements
         name: Export api requirements
         language: system
         pass_filenames: false
-        entry: poetry export --without-hashes --extras orm --extras api --output infra/requirements.api.txt
+        entry: poetry export --without-hashes --extras api --output infra/requirements.api.txt
         files: ^(pyproject.toml|poetry.lock)$
       - id: export-extractor-requirements
         name: Export extractor requirements
